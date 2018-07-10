@@ -52,12 +52,12 @@ class SQLinterface:
         self.offset+=self.limit #Update offset
 
         found = self.cur.fetchall() #get returned result
-        boards = np.zeros((self.limit, 3, 3)) #Pre-declare boards
-        moves = np.zeros((self.limit,3,3)) #Pre-declare moves
+        boards = np.zeros((self.limit,1, 9)) #Pre-declare boards
+        moves = np.zeros((self.limit,1,9)) #Pre-declare moves
         for i in range(0,self.limit):
-            boards[i,:,:] = self.decodeBoard(int(found[i][0])) #Decode every board
+            boards[i,0,:] = self.decodeBoard(int(found[i][0])).ravel() #Decode every board
             move = self.decodeMove(int(found[i][1]))[0] #Decode move
-            moves[i,lt2no[move[0]], int(move[1])-1] = 1 #Put figure in decoded field (we only teach networks for X so it's 1)
+            moves[i,0,lt2no[move[0]]*3+ int(move[1])-1] = 1 #Put figure in decoded field (we only teach networks for X so it's 1)
 
         return boards, moves
 
